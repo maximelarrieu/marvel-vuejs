@@ -27,14 +27,38 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <h3>Comics</h3>
+    <ul>
+      <li v-for="comic in comics" :key="comic.id">
+        {{ comic.title }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import ComicService from "../services/ComicService";
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      comics: []
+    }
+  },
+  created() {
+    this.comicService = new ComicService();
+  },
+  mounted() {
+    this.fetchAllComics();
+  },
+  methods: {
+    async fetchAllComics() {
+      await this.comicService.fetchAll().then(data => this.comics = data.results)
+    }
   }
 }
 </script>
