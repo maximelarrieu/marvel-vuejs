@@ -1,5 +1,7 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <a href="/">
+    <img alt="Vue logo" src="./assets/logo.png">
+  </a>
   <h1>Marvel API</h1>
   <router-view></router-view>
 </template>

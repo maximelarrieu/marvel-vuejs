@@ -1,11 +1,14 @@
 <template>
     <div>
         <h4>Auteurs</h4>
-        <ul>
+        <ul v-if="creators.length > 0">
             <li v-for="creator in creators" :key="creator.id">
                 {{ creator.fullName }}
             </li>
         </ul>
+        <p v-else-if="creators.length === 0">
+            pas de créateurs
+        </p>
     </div>
 </template>
 

@@ -1,6 +1,7 @@
 <template>
     <div class="containe">
         <h2>{{ comic.title }}</h2>
+        <p>{{ comic.description }}</p>
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-3">
                 <ComicCharaters />

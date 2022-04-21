@@ -1,11 +1,14 @@
 <template>
     <div>
         <h4>Personnages</h4>
-        <ul>
+        <ul v-if="characters.length > 0">
             <li v-for="character in characters" :key="character.id">
                 {{ character.name }}
             </li>
         </ul>
+        <p v-if="characters.length === 0">
+            pas de personnages
+        </p>
     </div>
 </template>
 
