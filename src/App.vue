@@ -1,16 +1,15 @@
 <template>
   <a href="/">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <img alt="Vue logo" src="./assets/logo.png" />
   </a>
   <h1>Marvel API</h1>
   <router-view></router-view>
 </template>
 
 <script>
-
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
 
 <style>
