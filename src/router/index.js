@@ -1,5 +1,4 @@
 import HomeView from '@/views/HomeView.vue'
-// import AboutView from '@/views/AboutView.vue'
 import ComicDetails from '@/views/ComicDetails.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
