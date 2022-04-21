@@ -13,7 +13,7 @@ export default class ComicService {
     }
 
     async fetchOne(comicId) {
-        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/comics/${comicId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
+        const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/comics/${comicId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)        
         return response.data.data
     }
 
