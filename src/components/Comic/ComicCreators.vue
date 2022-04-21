@@ -1,8 +1,8 @@
 <template>
     <div>
         <h4>Auteurs</h4>
-        <ul v-if="creators.length > 0">
-            <li v-for="creator in creators" :key="creator.id">
+        <ul class="list-group" v-if="creators.length > 0">
+            <li class="list-group-item" v-for="creator in creators" :key="creator.id">
                 {{ creator.fullName }}
             </li>
         </ul>

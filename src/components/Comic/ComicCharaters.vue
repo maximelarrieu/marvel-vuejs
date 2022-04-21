@@ -1,8 +1,8 @@
 <template>
     <div>
         <h4>Personnages</h4>
-        <ul v-if="characters.length > 0">
-            <li v-for="character in characters" :key="character.id">
+        <ul class="list-group" v-if="characters.length > 0">
+            <li class="list-group-item" v-for="character in characters" :key="character.id" @click="goToCharacterDetails(character.id)">
                 {{ character.name }}
             </li>
         </ul>
@@ -31,6 +31,9 @@ export default {
     methods: {
         async fetchComicCharacters(id) {
             await this.comicService.fetchComicCharacters(id).then(data => this.characters = data.results)
+        },
+        async goToCharacterDetails(id) {
+            this.$router.push(`/character/${id}`)
         }
     }
 }
