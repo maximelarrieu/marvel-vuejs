@@ -13,7 +13,6 @@ export default class SerieService {
 
     async fetchOne(serieId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/series/${serieId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
-        console.log('response', response);
         return response.data.data
     }
 

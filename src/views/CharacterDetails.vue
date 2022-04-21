@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        character details
         <h2>{{ character.name }}</h2>
         <p v-if="character.description">{{ character.description }}</p>
         <p v-else-if="!character.description">pas de description</p>

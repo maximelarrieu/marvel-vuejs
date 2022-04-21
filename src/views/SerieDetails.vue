@@ -1,15 +1,17 @@
 <template>
-    <div class="container">
+    <div class="container mb-5">
+        serie details
         <h2>{{ serie.title }}</h2>
+        <p>{{ serie.description }}</p>
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-3">
-                <!-- <ComicCharaters /> -->
+                <SerieCharacters />
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6">
-                <!-- <ComicInfos />           -->
+                <SerieInfos />
             </div>
             <div class="col-sm-12 col-md-12 col-lg-3">
-                <!-- <ComicCreators /> -->
+                <SerieCreators />
             </div>
         </div>
     </div>
@@ -17,16 +19,16 @@
 
 <script>
 import SerieService from '@/services/SerieService'
-// import ComicCharaters from '@/components/Comic/ComicCharaters.vue';
-// import ComicCreators from '@/components/Comic/ComicCreators.vue';
-// import ComicInfos from '@/components/Comic/ComicInfos.vue';
+import SerieCharacters from '@/components/Serie/SerieCharacters.vue';
+import SerieCreators from '@/components/Serie/SerieCreators.vue';
+import SerieInfos from '@/components/Serie/SerieInfos.vue';
 
 export default {
     name: 'SerieDetails',
     components: {
-        // ComicCharaters,
-        // ComicCreators,
-        // ComicInfos
+        SerieCharacters,
+        SerieCreators,
+        SerieInfos
     },
     data() {
         return {
