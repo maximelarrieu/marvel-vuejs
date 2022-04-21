@@ -1,6 +1,7 @@
 <template>
-    <div class="container">
-        comics details
+    <div class="container mb-5">
+        <h3>COMICS</h3>
+        <img :src="comicImage" alt="comic" class="mb-4">
         <h2>{{ comic.title }}</h2>
         <p>{{ comic.description }}</p>
         <div class="row">
@@ -30,12 +31,10 @@ export default {
         ComicCreators,
         ComicInfos
     },
-    props: {
-        id: Number
-    },
     data() {
         return {
-            comic: {}
+            comic: {},
+            comicImage: ''
         }
     },
     created() {
@@ -46,8 +45,21 @@ export default {
     },
     methods: {
         async fetchOneComic(id) {
-            await this.comicService.fetchOne(id).then(data => this.comic = data.results[0])
+            await this.comicService.fetchOne(id).then(data => 
+                this.comic = data.results[0],
+            ).then(comic => {
+                this.comicImage = `${comic.thumbnail.path}.${comic.thumbnail.extension}`
+            })
         }
     }
 }
 </script>
+
+<style scoped>
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+</style>

@@ -23,7 +23,6 @@ export default class CharacterService {
 
     async fetchCharacterEvents(characterId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/characters/${characterId}/events?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
-        console.log('response', response.data.data)
         return response.data.data
     }
 

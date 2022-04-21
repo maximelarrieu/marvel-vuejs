@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        character details
+        <h3>CHARACTER</h3>
+        <img :src="characterImage" alt="character" class="mb-4">
         <h2>{{ character.name }}</h2>
         <p v-if="character.description">{{ character.description }}</p>
         <p v-else-if="!character.description">pas de description</p>
@@ -33,7 +34,8 @@ export default {
     },
     data() {
         return {
-            character: {}
+            character: {},
+            characterImage: ''
         }
     },
     created() {
@@ -44,8 +46,21 @@ export default {
     },
     methods: {
         async fetchOneCharacter(id) {
-            await this.characterService.fetchOne(id).then(data => this.character = data.results[0])
+            await this.characterService.fetchOne(id).then(data => 
+                this.character = data.results[0]
+            ).then(character => {
+                this.characterImage = `${character.thumbnail.path}.${character.thumbnail.extension}`
+            })
         }
     }
 }
 </script>
+
+<style scoped>
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+</style>

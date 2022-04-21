@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h4>Auteurs</h4>
+        <h4>Creators</h4>
         <ul class="list-group" v-if="creators.length > 0">
-            <li class="list-group-item" v-for="creator in creators" :key="creator.id">
+            <li class="list-group-item" v-for="creator in creators" :key="creator.id" @click="goToComicCreator(creator.id)">
                 {{ creator.fullName }}
             </li>
         </ul>
@@ -20,7 +20,6 @@ export default {
     data() {
         return {
             creators: [],
-            comicProp: this.comic 
         }
     },
     created() {
@@ -32,6 +31,9 @@ export default {
     methods: {
         async fetchComicCreators(id) {
             await this.comicService.fetchComicCreators(id).then(data => this.creators = data.results)
+        },
+        async goToComicCreator(id) {
+            this.$router.push(`/creator/${id}`);
         }
     }
 }
