@@ -1,5 +1,6 @@
 <template>
-    <div class="containe">
+    <div class="container">
+        comics details
         <h2>{{ comic.title }}</h2>
         <p>{{ comic.description }}</p>
         <div class="row">

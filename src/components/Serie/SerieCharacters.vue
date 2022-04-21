@@ -1,36 +1,36 @@
 <template>
     <div>
-        <h4>Personnages</h4>
+        <h4>Characters</h4>
         <ul class="list-group" v-if="characters.length > 0">
             <li class="list-group-item" v-for="character in characters" :key="character.id" @click="goToCharacterDetails(character.id)">
                 {{ character.name }}
             </li>
         </ul>
         <p v-if="characters.length === 0">
-            pas de personnages
+            pas de characters
         </p>
     </div>
 </template>
 
 <script>
-import ComicService from "@/services/ComicService";
+import SerieService from "@/services/SerieService";
 
 export default {
-    name: 'ComicCharacters',
+    name: 'SerieCharacters',
     data() {
         return {
             characters: []
         }
     },
     created() {
-        this.comicService = new ComicService();
+        this.serieService = new SerieService();
     },
     mounted() {
-        this.fetchComicCharacters(this.$route.params.id);
+        this.fetchSerieCharacters(this.$route.params.id);
     },
     methods: {
-        async fetchComicCharacters(id) {
-            await this.comicService.fetchComicCharacters(id).then(data => this.characters = data.results)
+        async fetchSerieCharacters(id) {
+            await this.serieService.fetchSerieCharacters(id).then(data => this.characters = data.results)
         },
         async goToCharacterDetails(id) {
             this.$router.push(`/character/${id}`)
