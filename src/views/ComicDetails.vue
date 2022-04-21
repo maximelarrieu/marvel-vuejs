@@ -1,15 +1,15 @@
 <template>
-    <div class="container">
-        <h2>{{ comic.title }} - {{ comic.id }}</h2>
+    <div class="containe">
+        <h2>{{ comic.title }}</h2>
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-3">
-                <ComicCharaters :id="1158" />
+                <ComicCharaters />
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6">
-                <ComicInfos :id="1158" />          
+                <ComicInfos />          
             </div>
             <div class="col-sm-12 col-md-12 col-lg-3">
-                <ComicCreators :id="1158" />
+                <ComicCreators />
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@ export default {
         this.comicService = new ComicService();
     },
     mounted() {
-        this.fetchOneComic(this.id);
+        this.fetchOneComic(this.$route.params.id);
     },
     methods: {
         async fetchOneComic(id) {

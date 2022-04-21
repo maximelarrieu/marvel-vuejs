@@ -14,9 +14,6 @@ import ComicService from "@/services/ComicService";
 
 export default {
     name: 'ComicCharacters',
-    props: {
-        id: Number
-    },
     data() {
         return {
             characters: []
@@ -26,7 +23,7 @@ export default {
         this.comicService = new ComicService();
     },
     mounted() {
-        this.fetchComicCharacters(this.id);
+        this.fetchComicCharacters(this.$route.params.id);
     },
     methods: {
         async fetchComicCharacters(id) {
