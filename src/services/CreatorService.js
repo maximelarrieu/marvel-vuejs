@@ -13,7 +13,6 @@ export default class CreatorService {
 
     async fetchOne(creatorId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/creators/${creatorId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
-        console.log('response', response.data.data);
         return response.data.data
     }
 
@@ -24,6 +23,7 @@ export default class CreatorService {
 
     async fetchCreatorEvents(creatorId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/creators/${creatorId}/events?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
+        console.log('response', response.data.data);
         return response.data.data
     }
 

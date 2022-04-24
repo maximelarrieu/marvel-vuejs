@@ -8,7 +8,7 @@
                 <CreatorComics />
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6">
-                <!-- <SerieInfos /> -->
+                <CreatorInfos />
             </div>
             <div class="col-sm-12 col-md-12 col-lg-3">
                 <CreatorSeries />
@@ -21,14 +21,14 @@
 import CreatorService from '@/services/CreatorService'
 import CreatorComics from '@/components/Creator/CreatorComics.vue';
 import CreatorSeries from '@/components/Creator/CreatorSeries.vue';
-// import SerieInfos from '@/components/Serie/SerieInfos.vue';
+import CreatorInfos from '@/components/Creator/CreatorInfos.vue';
 
 export default {
     name: 'CreatorDetails',
     components: {
         CreatorComics,
-        CreatorSeries
-        // SerieInfos
+        CreatorSeries,
+        CreatorInfos
     },
     data() {
         return {
