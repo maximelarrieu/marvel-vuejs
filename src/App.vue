@@ -1,9 +1,8 @@
 <template>
   <div class="mb-5">
     <a href="/">
-      <img alt="Vue logo" src="./assets/logo.png" />
+      <img class="mb-4" alt="Vue logo" src="./assets/marvel-logo.png" />
     </a>
-    <h1>Marvel API</h1>
   </div>
 
   <router-view></router-view>
