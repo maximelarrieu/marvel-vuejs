@@ -7,30 +7,30 @@
             </li>
         </ul>
         <p v-if="characters.length === 0">
-            no characters
+            pas de personnages
         </p>
     </div>
 </template>
 
 <script>
-import SerieService from "@/services/SerieService";
+import EventService from "@/services/EventService";
 
 export default {
-    name: 'SerieCharacters',
+    name: 'EventCharacters',
     data() {
         return {
             characters: []
         }
     },
     created() {
-        this.serieService = new SerieService();
+        this.eventService = new EventService();
     },
     mounted() {
-        this.fetchSerieCharacters(this.$route.params.id);
+        this.fetchEventCharacters(this.$route.params.id);
     },
     methods: {
-        async fetchSerieCharacters(id) {
-            await this.serieService.fetchSerieCharacters(id).then(data => this.characters = data.results)
+        async fetchEventCharacters(id) {
+            await this.eventService.fetchEventCharacters(id).then(data => this.characters = data.results)
         },
         async goToCharacterDetails(id) {
             this.$router.push(`/character/${id}`)

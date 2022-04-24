@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    
     <input
       type="text"
-      class="form-control mt-5 mb-5"
-      placeholder="Search"
+      class="form-control mb-5"
+      placeholder="Seatch a comic"
     />
-    <!-- <h2>Liste des comics</h2>
+    <h2>Comics list</h2>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -19,7 +18,7 @@
           <td>{{ comic.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Voir les détails
+              Show détails
             </button>
           </td>
         </tr>
@@ -35,19 +34,19 @@
       :container-class="'pagination'"
       :page-class="'page-item'"
     >
-    </paginate> -->
+    </paginate>
   </div>
 </template>
 
 <script>
 import ComicService from "../services/ComicService";
-// import Paginate from "vuejs-paginate-next";
+import Paginate from "vuejs-paginate-next";
 
 export default {
-  name: "HomeView",
-  // components: {
-  //   paginate: Paginate,
-  // },
+  name: "ComicsList",
+  components: {
+    paginate: Paginate,
+  },
   data() {
     return {
       limit: 20,
@@ -71,6 +70,9 @@ export default {
           this.totalComics = data.total;
           this.nbPages = Math.floor(data.total / this.limit);
         });
+    },
+    async goToComicDetail(id) {
+      this.$router.push(`/comic/${id}`);
     },
     clickCallback(pageNum) {
       this.fetchAllComics((pageNum - 1) * this.limit);

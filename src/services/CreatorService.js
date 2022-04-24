@@ -11,6 +11,14 @@ export default class CreatorService {
         return response.data.data
     }
 
+    async fetchAllForPaginate(offset) {
+        const response = await axios.get(
+        `${process.env.VUE_APP_BASE_URL}/creators?ts=${ts}&limit=20&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
+        );
+        console.log('characterlist', response.data.data)
+        return response.data.data;
+    }
+
     async fetchOne(creatorId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/creators/${creatorId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
         return response.data.data

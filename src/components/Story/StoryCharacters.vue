@@ -13,24 +13,24 @@
 </template>
 
 <script>
-import SerieService from "@/services/SerieService";
+import StoryService from "@/services/StoryService";
 
 export default {
-    name: 'SerieCharacters',
+    name: 'StoryCharacters',
     data() {
         return {
             characters: []
         }
     },
     created() {
-        this.serieService = new SerieService();
+        this.storyService = new StoryService();
     },
     mounted() {
-        this.fetchSerieCharacters(this.$route.params.id);
+        this.fetchStoryCharacters(this.$route.params.id);
     },
     methods: {
-        async fetchSerieCharacters(id) {
-            await this.serieService.fetchSerieCharacters(id).then(data => this.characters = data.results)
+        async fetchStoryCharacters(id) {
+            await this.storyService.fetchStoryCharacters(id).then(data => this.characters = data.results)
         },
         async goToCharacterDetails(id) {
             this.$router.push(`/character/${id}`)

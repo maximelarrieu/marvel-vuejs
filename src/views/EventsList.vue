@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    
     <input
       type="text"
-      class="form-control mt-5 mb-5"
-      placeholder="Search"
+      class="form-control mb-5"
+      placeholder="Search an event"
     />
-    <!-- <h2>Liste des comics</h2>
+    <h2>Events list</h2>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -15,11 +14,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="comic in comics" :key="comic.id">
-          <td>{{ comic.title }}</td>
+        <tr v-for="event in events" :key="event.id">
+          <td>{{ event.title }}</td>
           <td>
-            <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Voir les détails
+            <button class="btn btn-primary" @click="goToEventDetail(event.id)">
+              Show détails
             </button>
           </td>
         </tr>
@@ -35,50 +34,53 @@
       :container-class="'pagination'"
       :page-class="'page-item'"
     >
-    </paginate> -->
+    </paginate>
   </div>
 </template>
 
 <script>
-import ComicService from "../services/ComicService";
-// import Paginate from "vuejs-paginate-next";
+import EventService from "../services/EventService";
+import Paginate from "vuejs-paginate-next";
 
 export default {
-  name: "HomeView",
-  // components: {
-  //   paginate: Paginate,
-  // },
+  name: "CharactersList",
+  components: {
+    paginate: Paginate,
+  },
   data() {
     return {
       limit: 20,
-      comics: [],
-      totalComics: 0,
+      events: [],
+      totalEvents: 0,
       nbPages: 0,
     };
   },
   created() {
-    this.comicService = new ComicService();
+    this.eventService = new EventService();
   },
   mounted() {
-    this.fetchAllComics(0);
+    this.fetchAllEvents(0);
   },
   methods: {
-    async fetchAllComics(offset) {
-      await this.comicService
+    async fetchAllEvents(offset) {
+      await this.eventService
         .fetchAllForPaginate(offset === 1 ? 0 : offset)
         .then((data) => {
-          this.comics = data.results;
-          this.totalComics = data.total;
+          this.events = data.results;
+          this.totalEvents = data.total;
           this.nbPages = Math.floor(data.total / this.limit);
         });
     },
+    async goToEventDetail(id) {
+      this.$router.push(`/event/${id}`);
+    },
     clickCallback(pageNum) {
-      this.fetchAllComics((pageNum - 1) * this.limit);
+      this.fetchAllEvents((pageNum - 1) * this.limit);
     },
   },
   computed: {
     rows() {
-      return this.comics.length;
+      return this.events.length;
     },
   },
 };

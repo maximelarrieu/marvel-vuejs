@@ -1,6 +1,7 @@
 <template>
     <div class="container mb-5">
-        serie details
+        <h3>SERIE</h3>
+        <img :src="serieImage" alt="serie" class="mb-4">
         <h2>{{ serie.title }}</h2>
         <p>{{ serie.description }}</p>
         <div class="row">
@@ -32,7 +33,8 @@ export default {
     },
     data() {
         return {
-            serie: {}
+            serie: {},
+            serieImage: ''
         }
     },
     created() {
@@ -43,8 +45,21 @@ export default {
     },
     methods: {
         async fetchOneSerie(id) {
-            await this.serieService.fetchOne(id).then(data => this.serie = data.results[0])
+            await this.serieService.fetchOne(id).then(data => 
+                this.serie = data.results[0]
+            ).then(serie => {
+                this.serieImage = `${serie.thumbnail.path}.${serie.thumbnail.extension}`
+            })
         }
     }
 }
 </script>
+
+<style scoped>
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+</style>

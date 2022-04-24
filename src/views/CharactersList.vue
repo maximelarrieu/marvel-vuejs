@@ -1,25 +1,24 @@
 <template>
   <div class="container">
-    
     <input
       type="text"
-      class="form-control mt-5 mb-5"
-      placeholder="Search"
+      class="form-control mb-5"
+      placeholder="Search a character"
     />
-    <!-- <h2>Liste des comics</h2>
+    <h2>Charaters list</h2>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Title</th>
+          <th scope="col">Name</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="comic in comics" :key="comic.id">
-          <td>{{ comic.title }}</td>
+        <tr v-for="character in characters" :key="character.id">
+          <td>{{ character.name }}</td>
           <td>
-            <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Voir les détails
+            <button class="btn btn-primary" @click="goToCharacterDetail(character.id)">
+              Show détails
             </button>
           </td>
         </tr>
@@ -35,50 +34,53 @@
       :container-class="'pagination'"
       :page-class="'page-item'"
     >
-    </paginate> -->
+    </paginate>
   </div>
 </template>
 
 <script>
-import ComicService from "../services/ComicService";
-// import Paginate from "vuejs-paginate-next";
+import CharacterService from "../services/CharacterService";
+import Paginate from "vuejs-paginate-next";
 
 export default {
-  name: "HomeView",
-  // components: {
-  //   paginate: Paginate,
-  // },
+  name: "CharactersList",
+  components: {
+    paginate: Paginate,
+  },
   data() {
     return {
       limit: 20,
-      comics: [],
-      totalComics: 0,
+      characters: [],
+      totalCharacters: 0,
       nbPages: 0,
     };
   },
   created() {
-    this.comicService = new ComicService();
+    this.characterService = new CharacterService();
   },
   mounted() {
-    this.fetchAllComics(0);
+    this.fetchAllCharacters(0);
   },
   methods: {
-    async fetchAllComics(offset) {
-      await this.comicService
+    async fetchAllCharacters(offset) {
+      await this.characterService
         .fetchAllForPaginate(offset === 1 ? 0 : offset)
         .then((data) => {
-          this.comics = data.results;
-          this.totalComics = data.total;
+          this.characters = data.results;
+          this.totalCharacters = data.total;
           this.nbPages = Math.floor(data.total / this.limit);
         });
     },
+    async goToCharacterDetail(id) {
+      this.$router.push(`/character/${id}`);
+    },
     clickCallback(pageNum) {
-      this.fetchAllComics((pageNum - 1) * this.limit);
+      this.fetchAllCharacters((pageNum - 1) * this.limit);
     },
   },
   computed: {
     rows() {
-      return this.comics.length;
+      return this.characters.length;
     },
   },
 };
