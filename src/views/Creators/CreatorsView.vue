@@ -3,13 +3,16 @@
     <input
       type="text"
       class="form-control mb-5"
-      placeholder="Search a creator"
+      placeholder="Rechercher un créateur"
     />
-    <h2>Creators list</h2>
-    <table class="table table-striped">
+    <h2>Liste des créateurs</h2>
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col">Créateur</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -17,17 +20,22 @@
         <tr v-for="creator in creators" :key="creator.id">
           <td>{{ creator.fullName }}</td>
           <td>
-            <button class="btn btn-primary" @click="goToCreatorDetail(creator.id)">
-              Show détails
+            <button
+              class="btn btn-primary"
+              @click="goToCreatorDetail(creator.id)"
+            >
+              Voir les détails
             </button>
           </td>
         </tr>
       </tbody>
     </table>
     <paginate
+      v-if="!isLoading"
+      v-model="currentPage"
       :page-count="this.nbPages"
-      :page-range="3"
-      :margin-pages="2"
+      :page-range="5"
+      :margin-pages="5"
       :click-handler="clickCallback"
       :prev-text="'Prev'"
       :next-text="'Next'"
@@ -39,16 +47,20 @@
 </template>
 
 <script>
-import CreatorService from "../services/CreatorService";
+import CreatorService from "../../services/CreatorService";
 import Paginate from "vuejs-paginate-next";
+import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
-  name: "CreatorsList",
+  name: "CreatorsView",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent,
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       creators: [],
       totalCreators: 0,
@@ -63,18 +75,25 @@ export default {
   },
   methods: {
     async fetchAllCreators(offset) {
-      await this.creatorService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.creators = data.results;
-          this.totalCreators = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
-        });
+      try {
+        await this.creatorService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.creators = data.results;
+            this.totalCreators = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async goToCreatorDetail(id) {
-      this.$router.push(`/creator/${id}`);
+      this.$router.push(`/creators/${id}`);
     },
     clickCallback(pageNum) {
+      this.isLoading = true;
       this.fetchAllCreators((pageNum - 1) * this.limit);
     },
   },

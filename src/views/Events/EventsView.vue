@@ -6,7 +6,10 @@
       placeholder="Search an event"
     />
     <h2>Events list</h2>
-    <table class="table table-striped">
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Title</th>
@@ -25,6 +28,8 @@
       </tbody>
     </table>
     <paginate
+      v-if="!isLoading"
+      v-model="currentPage"
       :page-count="this.nbPages"
       :page-range="3"
       :margin-pages="2"
@@ -39,16 +44,20 @@
 </template>
 
 <script>
-import EventService from "../services/EventService";
+import EventService from "@/services/EventService";
 import Paginate from "vuejs-paginate-next";
+import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
-  name: "CharactersList",
+  name: "EventsView",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       events: [],
       totalEvents: 0,
@@ -63,18 +72,25 @@ export default {
   },
   methods: {
     async fetchAllEvents(offset) {
-      await this.eventService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.events = data.results;
-          this.totalEvents = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
+      try {
+        await this.eventService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.events = data.results;
+            this.totalEvents = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
         });
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
     },
     async goToEventDetail(id) {
-      this.$router.push(`/event/${id}`);
+      this.$router.push(`/events/${id}`);
     },
     clickCallback(pageNum) {
+      this.isLoading = true;
       this.fetchAllEvents((pageNum - 1) * this.limit);
     },
   },

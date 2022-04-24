@@ -3,13 +3,16 @@
     <input
       type="text"
       class="form-control mb-5"
-      placeholder="Search a character"
+      placeholder="Rechercher un personnage"
     />
-    <h2>Charaters list</h2>
-    <table class="table table-striped">
+    <h2>Liste des personnages</h2>
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col">Nom</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -17,17 +20,22 @@
         <tr v-for="character in characters" :key="character.id">
           <td>{{ character.name }}</td>
           <td>
-            <button class="btn btn-primary" @click="goToCharacterDetail(character.id)">
-              Show détails
+            <button
+              class="btn btn-primary"
+              @click="goToCharacterDetail(character.id)"
+            >
+              Voir les détails
             </button>
           </td>
         </tr>
       </tbody>
     </table>
     <paginate
+      v-if="!isLoading"
+      v-model="currentPage"
       :page-count="this.nbPages"
-      :page-range="3"
-      :margin-pages="2"
+      :page-range="5"
+      :margin-pages="5"
       :click-handler="clickCallback"
       :prev-text="'Prev'"
       :next-text="'Next'"
@@ -39,16 +47,20 @@
 </template>
 
 <script>
-import CharacterService from "../services/CharacterService";
+import CharacterService from "../../services/CharacterService";
 import Paginate from "vuejs-paginate-next";
+import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
-  name: "CharactersList",
+  name: "CharactersView",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent,
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       characters: [],
       totalCharacters: 0,
@@ -63,18 +75,25 @@ export default {
   },
   methods: {
     async fetchAllCharacters(offset) {
-      await this.characterService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.characters = data.results;
-          this.totalCharacters = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
-        });
+      try {
+        await this.characterService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.characters = data.results;
+            this.totalCharacters = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async goToCharacterDetail(id) {
-      this.$router.push(`/character/${id}`);
+      this.$router.push(`/characters/${id}`);
     },
     clickCallback(pageNum) {
+      this.isLoading = true;
       this.fetchAllCharacters((pageNum - 1) * this.limit);
     },
   },

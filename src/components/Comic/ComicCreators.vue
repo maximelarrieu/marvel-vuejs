@@ -1,40 +1,45 @@
 <template>
-    <div>
-        <h4>Creators</h4>
-        <ul class="list-group" v-if="creators.length > 0">
-            <li class="list-group-item" v-for="creator in creators" :key="creator.id" @click="goToComicCreator(creator.id)">
-                {{ creator.fullName }}
-            </li>
-        </ul>
-        <p v-else-if="creators.length === 0">
-            pas de créateurs
-        </p>
-    </div>
+  <div>
+    <h4>Creators</h4>
+    <ul class="list-group" v-if="creators.length > 0">
+      <li
+        class="list-group-item"
+        v-for="creator in creators"
+        :key="creator.id"
+        @click="goToComicCreator(creator.id)"
+      >
+        {{ creator.fullName }}
+      </li>
+    </ul>
+    <p v-else-if="creators.length === 0">pas de créateurs</p>
+  </div>
 </template>
 
 <script>
 import ComicService from "@/services/ComicService";
 
 export default {
-    name: 'ComicCreators',
-    data() {
-        return {
-            creators: [],
-        }
+  name: "ComicCreators",
+  data() {
+    return {
+      creators: [],
+    };
+  },
+  created() {
+    this.comicService = new ComicService();
+  },
+  mounted() {
+    this.fetchComicCreators(this.$route.params.id);
+  },
+  methods: {
+    async fetchComicCreators(id) {
+      await this.comicService
+        .fetchComicCreators(id)
+        .then((data) => (this.creators = data.results));
     },
-    created() {
-        this.comicService = new ComicService();
+    async goToComicCreator(id) {
+      this.$router.push(`/creators/${id}`);
     },
-    mounted() {
-        this.fetchComicCreators(this.$route.params.id);
-    },
-    methods: {
-        async fetchComicCreators(id) {
-            await this.comicService.fetchComicCreators(id).then(data => this.creators = data.results)
-        },
-        async goToComicCreator(id) {
-            this.$router.push(`/creator/${id}`);
-        }
-    }
-}
+  },
+};
 </script>

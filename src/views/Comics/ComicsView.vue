@@ -3,10 +3,13 @@
     <input
       type="text"
       class="form-control mb-5"
-      placeholder="Seatch a comic"
+      placeholder="Rechercher un comics"
     />
-    <h2>Comics list</h2>
-    <table class="table table-striped">
+    <h2>Liste des comics</h2>
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Title</th>
@@ -18,16 +21,18 @@
           <td>{{ comic.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Show détails
+              Voir les détails
             </button>
           </td>
         </tr>
       </tbody>
     </table>
     <paginate
+      v-if="!isLoading"
+      v-model="currentPage"
       :page-count="this.nbPages"
-      :page-range="3"
-      :margin-pages="2"
+      :page-range="5"
+      :margin-pages="5"
       :click-handler="clickCallback"
       :prev-text="'Prev'"
       :next-text="'Next'"
@@ -39,16 +44,20 @@
 </template>
 
 <script>
-import ComicService from "../services/ComicService";
+import ComicService from "../../services/ComicService";
 import Paginate from "vuejs-paginate-next";
+import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
-  name: "ComicsList",
+  name: "ComicsView",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent,
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       comics: [],
       totalComics: 0,
@@ -63,16 +72,23 @@ export default {
   },
   methods: {
     async fetchAllComics(offset) {
-      await this.comicService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.comics = data.results;
-          this.totalComics = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
-        });
+      this.isLoading = true;
+      try {
+        await this.comicService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.comics = data.results;
+            this.totalComics = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async goToComicDetail(id) {
-      this.$router.push(`/comic/${id}`);
+      this.$router.push(`/comics/${id}`);
     },
     clickCallback(pageNum) {
       this.fetchAllComics((pageNum - 1) * this.limit);

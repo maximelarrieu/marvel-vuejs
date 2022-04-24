@@ -3,31 +3,38 @@
     <input
       type="text"
       class="form-control mb-5"
-      placeholder="Search a serie"
+      placeholder="Rechercher une série"
     />
-    <h2>Serie list</h2>
-    <table class="table table-striped">
+    <h2>Liste des séries</h2>
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col">Titre</th>
+          <th scope="col">Description</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="serie in series" :key="serie.id">
           <td>{{ serie.title }}</td>
+          <td>{{ serie.description ?? "Pas de description" }}</td>
           <td>
             <button class="btn btn-primary" @click="goToSerieDetail(serie.id)">
-              Show détails
+              Voir les détails
             </button>
           </td>
         </tr>
       </tbody>
     </table>
     <paginate
+      v-if="!isLoading"
+      v-model="currentPage"
       :page-count="this.nbPages"
-      :page-range="3"
-      :margin-pages="2"
+      :page-range="5"
+      :margin-pages="5"
       :click-handler="clickCallback"
       :prev-text="'Prev'"
       :next-text="'Next'"
@@ -39,16 +46,19 @@
 </template>
 
 <script>
-import SerieService from "../services/SerieService";
+import SerieService from "../../services/SerieService";
 import Paginate from "vuejs-paginate-next";
-
+import LoaderComponent from "../../components/Loader/Loader.vue";
 export default {
-  name: "SeriesList",
+  name: "SeriesView",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent,
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       series: [],
       totalSeries: 0,
@@ -63,18 +73,25 @@ export default {
   },
   methods: {
     async fetchAllSeries(offset) {
-      await this.serieService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.series = data.results;
-          this.totalSeries = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
-        });
+      try {
+        await this.serieService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.series = data.results;
+            this.totalSeries = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async goToSerieDetail(id) {
-      this.$router.push(`/serie/${id}`);
+      this.$router.push(`/series/${id}`);
     },
     clickCallback(pageNum) {
+      this.isLoading = true;
       this.fetchAllSeries((pageNum - 1) * this.limit);
     },
   },

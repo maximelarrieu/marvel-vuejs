@@ -1,9 +1,11 @@
-import md5 from 'js-md5';
-import axios from 'axios';
+import md5 from "js-md5";
+import axios from "axios";
 
 const ts = Number(new Date());
 const hash = md5.create();
-hash.update(ts + process.env.VUE_APP_API_KEY_PRIVATE + process.env.VUE_APP_API_KEY_PUBLIC);
+hash.update(
+  ts + process.env.VUE_APP_API_KEY_PRIVATE + process.env.VUE_APP_API_KEY_PUBLIC
+);
 
 export default class CharacterService {
     async fetchAll() {

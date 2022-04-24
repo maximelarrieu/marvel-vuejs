@@ -6,7 +6,10 @@
       placeholder="Search a story"
     />
     <h2>Stories list</h2>
-    <table class="table table-striped">
+    <div class="m-5" v-if="isLoading">
+      <loader />
+    </div>
+    <table v-else class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Title</th>
@@ -18,7 +21,7 @@
           <td>{{ story.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToStoryDetail(story.id)">
-              Show détails
+              Show details
             </button>
           </td>
         </tr>
@@ -39,16 +42,20 @@
 </template>
 
 <script>
-import StoryService from "../services/StoryService";
+import StoryService from "../../services/StoryService";
 import Paginate from "vuejs-paginate-next";
+import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
   name: "StoriesList",
   components: {
     paginate: Paginate,
+    loader: LoaderComponent,
   },
   data() {
     return {
+      currentPage: 1,
+      isLoading: true,
       limit: 20,
       stories: [],
       totalStories: 0,
@@ -63,18 +70,25 @@ export default {
   },
   methods: {
     async fetchAllStories(offset) {
-      await this.storyService
-        .fetchAllForPaginate(offset === 1 ? 0 : offset)
-        .then((data) => {
-          this.stories = data.results;
-          this.totalStories = data.total;
-          this.nbPages = Math.floor(data.total / this.limit);
+      try {
+        await this.storyService
+          .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.stories = data.results;
+            this.totalStories = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
         });
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
     },
     async goToStoryDetail(id) {
-      this.$router.push(`/story/${id}`);
+      this.$router.push(`/stories/${id}`);
     },
     clickCallback(pageNum) {
+      this.isLoading = true;
       this.fetchAllStories((pageNum - 1) * this.limit);
     },
   },
