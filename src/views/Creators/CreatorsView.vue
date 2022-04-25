@@ -2,29 +2,32 @@
   <div class="container">
     <input
       type="text"
+      v-model="search"
       class="form-control mb-5"
-      placeholder="Rechercher un créateur"
+      placeholder="Search a creator..."
     />
-    <h2>Liste des créateurs</h2>
+    <h2>Creator list</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
     <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Créateur</th>
+          <th></th>
+          <th scope="col">Creator</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="creator in creators" :key="creator.id">
+        <tr v-for="creator in filteredCreators" :key="creator.id">
+          <td><img :src="`${creator.thumbnail.path}.${creator.thumbnail.extension}`" /></td>
           <td>{{ creator.fullName }}</td>
           <td>
             <button
               class="btn btn-primary"
               @click="goToCreatorDetail(creator.id)"
             >
-              Voir les détails
+              Show details
             </button>
           </td>
         </tr>
@@ -65,6 +68,7 @@ export default {
       creators: [],
       totalCreators: 0,
       nbPages: 0,
+      search: ""
     };
   },
   created() {
@@ -101,6 +105,11 @@ export default {
     rows() {
       return this.creators.length;
     },
+    filteredCreators() {
+      return this.creators.filter(creator => {
+        return creator.fullName.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+      })
+    }
   },
 };
 </script>
@@ -119,5 +128,9 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>

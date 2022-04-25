@@ -4,32 +4,8 @@
       type="text"
       v-model="search"
       class="form-control mb-5"
-      placeholder="Search a comics..."
+      placeholder="Search"
     />
-    <h2>Comics list</h2>
-    <div class="m-5" v-if="isLoading">
-      <loader />
-    </div>
-    <table v-else class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th scope="col">Title</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="comic in filteredComics" :key="comic.id">
-          <td><img :src="`${comic.thumbnail.path}.${comic.thumbnail.extension}`" /></td>
-          <td>{{ comic.title }}</td>
-          <td>
-            <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Show details
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
     <paginate
       v-if="!isLoading"
       v-model="currentPage"
@@ -49,13 +25,14 @@
 <script>
 import ComicService from "../../services/ComicService";
 import Paginate from "vuejs-paginate-next";
-import LoaderComponent from "../../components/Loader/Loader.vue";
 
 export default {
-  name: "ComicsView",
+  name: "SearchComponent",
   components: {
     paginate: Paginate,
-    loader: LoaderComponent,
+  },
+  props: {
+    entity: String
   },
   data() {
     return {
@@ -63,7 +40,6 @@ export default {
       isLoading: true,
       limit: 20,
       comics: [],
-      comicImage: "",
       totalComics: 0,
       nbPages: 0,
       search: ""
@@ -85,7 +61,7 @@ export default {
             this.comics = data.results;
             this.totalComics = data.total;
             this.nbPages = Math.floor(data.total / this.limit);
-          })
+          });
       } catch (error) {
         console.log(error);
       } finally {
@@ -126,9 +102,5 @@ li {
 }
 a {
   color: #42b983;
-}
-img {
-  width: 100px;
-  height: 100px;
 }
 </style>

@@ -2,29 +2,32 @@
   <div class="container">
     <input
       type="text"
+      v-model="search"
       class="form-control mb-5"
-      placeholder="Rechercher un personnage"
+      placeholder="Search a character..."
     />
-    <h2>Liste des personnages</h2>
+    <h2>Characters list</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
     <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Nom</th>
+          <th></th>
+          <th scope="col">Name</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="character in characters" :key="character.id">
+        <tr v-for="character in filteredCharacters" :key="character.id">
+          <td><img :src="`${character.thumbnail.path}.${character.thumbnail.extension}`" /></td>
           <td>{{ character.name }}</td>
           <td>
             <button
               class="btn btn-primary"
               @click="goToCharacterDetail(character.id)"
             >
-              Voir les détails
+              Show details
             </button>
           </td>
         </tr>
@@ -65,6 +68,7 @@ export default {
       characters: [],
       totalCharacters: 0,
       nbPages: 0,
+      search: ""
     };
   },
   created() {
@@ -101,6 +105,11 @@ export default {
     rows() {
       return this.characters.length;
     },
+    filteredCharacters() {
+      return this.characters.filter(character => {
+        return character.name.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+      })
+    }
   },
 };
 </script>
@@ -119,5 +128,9 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>

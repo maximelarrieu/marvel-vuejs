@@ -2,8 +2,9 @@
   <div class="container">
     <input
       type="text"
+      v-model="search"
       class="form-control mb-5"
-      placeholder="Search an event"
+      placeholder="Search an event..."
     />
     <h2>Events list</h2>
     <div class="m-5" v-if="isLoading">
@@ -12,16 +13,18 @@
     <table v-else class="table table-striped">
       <thead>
         <tr>
+          <th></th>
           <th scope="col">Title</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="event in events" :key="event.id">
+        <tr v-for="event in filteredEvents" :key="event.id">
+          <td><img :src="`${event.thumbnail.path}.${event.thumbnail.extension}`" /></td>
           <td>{{ event.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToEventDetail(event.id)">
-              Show détails
+              Show details
             </button>
           </td>
         </tr>
@@ -62,6 +65,7 @@ export default {
       events: [],
       totalEvents: 0,
       nbPages: 0,
+      search: ""
     };
   },
   created() {
@@ -98,6 +102,11 @@ export default {
     rows() {
       return this.events.length;
     },
+    filteredEvents() {
+      return this.events.filter(event => {
+        return event.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+      })
+    }
   },
 };
 </script>
@@ -116,5 +125,9 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>

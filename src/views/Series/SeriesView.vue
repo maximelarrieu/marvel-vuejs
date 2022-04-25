@@ -2,28 +2,31 @@
   <div class="container">
     <input
       type="text"
+      v-model="search"
       class="form-control mb-5"
-      placeholder="Rechercher une série"
+      placeholder="Search a serie..."
     />
-    <h2>Liste des séries</h2>
+    <h2>Series list</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
     <table v-else class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Titre</th>
+          <th></th>
+          <th scope="col">Title</th>
           <th scope="col">Description</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="serie in series" :key="serie.id">
+        <tr v-for="serie in filteredSeries" :key="serie.id">
+          <td><img :src="`${serie.thumbnail.path}.${serie.thumbnail.extension}`" /></td>
           <td>{{ serie.title }}</td>
-          <td>{{ serie.description ?? "Pas de description" }}</td>
+          <td>{{ serie.description ?? "No description" }}</td>
           <td>
             <button class="btn btn-primary" @click="goToSerieDetail(serie.id)">
-              Voir les détails
+              Show details
             </button>
           </td>
         </tr>
@@ -49,6 +52,7 @@
 import SerieService from "../../services/SerieService";
 import Paginate from "vuejs-paginate-next";
 import LoaderComponent from "../../components/Loader/Loader.vue";
+
 export default {
   name: "SeriesView",
   components: {
@@ -63,6 +67,7 @@ export default {
       series: [],
       totalSeries: 0,
       nbPages: 0,
+      search: ""
     };
   },
   created() {
@@ -99,6 +104,11 @@ export default {
     rows() {
       return this.series.length;
     },
+    filteredSeries() {
+      return this.series.filter(serie => {
+        return serie.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+      })
+    }
   },
 };
 </script>
@@ -117,5 +127,9 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>

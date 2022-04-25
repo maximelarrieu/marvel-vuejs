@@ -2,8 +2,9 @@
   <div class="container">
     <input
       type="text"
+      v-model="search"
       class="form-control mb-5"
-      placeholder="Search a story"
+      placeholder="Search a story..."
     />
     <h2>Stories list</h2>
     <div class="m-5" v-if="isLoading">
@@ -12,12 +13,14 @@
     <table v-else class="table table-striped">
       <thead>
         <tr>
+          <th></th>
           <th scope="col">Title</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="story in stories" :key="story.id">
+        <tr v-for="story in filteredStories" :key="story.id">
+          <td><img :src="`${story.thumbnail.path}.${story.thumbnail.extension}`" /></td>
           <td>{{ story.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToStoryDetail(story.id)">
@@ -60,6 +63,7 @@ export default {
       stories: [],
       totalStories: 0,
       nbPages: 0,
+      search: ""
     };
   },
   created() {
@@ -94,8 +98,13 @@ export default {
   },
   computed: {
     rows() {
-      return this.events.length;
+      return this.stories.length;
     },
+    filteredStories() {
+      return this.stories.filter(story => {
+        return story.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+      })
+    }
   },
 };
 </script>
@@ -114,5 +123,9 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>
