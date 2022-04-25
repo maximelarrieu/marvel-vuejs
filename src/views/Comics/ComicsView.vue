@@ -2,6 +2,7 @@
   <div class="container">
     <input
       type="text"
+      @input="fetchAllComicsWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
       placeholder="Search a comics..."
@@ -19,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="comic in filteredComics" :key="comic.id">
+        <tr v-for="comic in comics" :key="comic.id">
           <td><img :src="`${comic.thumbnail.path}.${comic.thumbnail.extension}`" /></td>
           <td>{{ comic.title }}</td>
           <td>
@@ -31,12 +32,25 @@
       </tbody>
     </table>
     <paginate
-      v-if="!isLoading"
+      v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
       :page-count="this.nbPages"
       :page-range="5"
       :margin-pages="5"
       :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
       :prev-text="'Prev'"
       :next-text="'Next'"
       :container-class="'pagination'"
@@ -92,21 +106,35 @@ export default {
         this.isLoading = false;
       }
     },
+    async fetchAllComicsWithSearch(title, offset) {
+      this.isLoading = true;
+      try {
+        await this.comicService
+          .fetchAllForPaginateWithSearch(title, offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.comics = data.results;
+            this.totalComics = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async goToComicDetail(id) {
       this.$router.push(`/comics/${id}`);
     },
     clickCallback(pageNum) {
       this.fetchAllComics((pageNum - 1) * this.limit);
     },
+    clickCallbackWithSearch(pageNum) {
+      this.fetchAllComicsWithSearch(this.search, (pageNum - 1) * this.limit);
+    }
   },
   computed: {
     rows() {
       return this.comics.length;
-    },
-    filteredComics() {
-      return this.comics.filter(comic => {
-        return comic.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
-      })
     }
   },
 };

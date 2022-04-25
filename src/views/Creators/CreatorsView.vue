@@ -2,6 +2,7 @@
   <div class="container">
     <input
       type="text"
+      @input="fetchAllCreatorsWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
       placeholder="Search a creator..."
@@ -19,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="creator in filteredCreators" :key="creator.id">
+        <tr v-for="creator in creators" :key="creator.id">
           <td><img :src="`${creator.thumbnail.path}.${creator.thumbnail.extension}`" /></td>
           <td>{{ creator.fullName }}</td>
           <td>
@@ -34,12 +35,25 @@
       </tbody>
     </table>
     <paginate
-      v-if="!isLoading"
+      v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
       :page-count="this.nbPages"
       :page-range="5"
       :margin-pages="5"
       :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
       :prev-text="'Prev'"
       :next-text="'Next'"
       :container-class="'pagination'"
@@ -93,6 +107,21 @@ export default {
         this.isLoading = false;
       }
     },
+    async fetchAllCreatorsWithSearch(name, offset) {
+      try {
+        await this.creatorService
+          .fetchAllForPaginateWithSearch(name, offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.creators = data.results;
+            this.totalCreators = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async goToCreatorDetail(id) {
       this.$router.push(`/creators/${id}`);
     },
@@ -100,15 +129,14 @@ export default {
       this.isLoading = true;
       this.fetchAllCreators((pageNum - 1) * this.limit);
     },
+    clickCallbackWithSearch(pageNum) {
+      this.isLoading = true;
+      this.fetchAllCreatorsWithSearch(this.search, (pageNum - 1) * this.limit);
+    },
   },
   computed: {
     rows() {
       return this.creators.length;
-    },
-    filteredCreators() {
-      return this.creators.filter(creator => {
-        return creator.fullName.toLowerCase().indexOf(this.search.toLowerCase()) != -1
-      })
     }
   },
 };

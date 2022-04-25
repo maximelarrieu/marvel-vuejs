@@ -2,6 +2,7 @@
   <div class="container">
     <input
       type="text"
+      @input="fetchAllSeriesWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
       placeholder="Search a serie..."
@@ -20,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="serie in filteredSeries" :key="serie.id">
+        <tr v-for="serie in series" :key="serie.id">
           <td><img :src="`${serie.thumbnail.path}.${serie.thumbnail.extension}`" /></td>
           <td>{{ serie.title }}</td>
           <td>{{ serie.description ?? "No description" }}</td>
@@ -33,12 +34,25 @@
       </tbody>
     </table>
     <paginate
-      v-if="!isLoading"
+      v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
       :page-count="this.nbPages"
       :page-range="5"
       :margin-pages="5"
       :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
       :prev-text="'Prev'"
       :next-text="'Next'"
       :container-class="'pagination'"
@@ -92,6 +106,21 @@ export default {
         this.isLoading = false;
       }
     },
+    async fetchAllSeriesWithSearch(title, offset) {
+      try {
+        await this.serieService
+          .fetchAllForPaginateWithSearch(title, offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.series = data.results;
+            this.totalSeries = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async goToSerieDetail(id) {
       this.$router.push(`/series/${id}`);
     },
@@ -99,15 +128,14 @@ export default {
       this.isLoading = true;
       this.fetchAllSeries((pageNum - 1) * this.limit);
     },
+    clickCallbackWithSearch(pageNum) {
+      this.isLoading = true;
+      this.fetchAllSeries(this.search, (pageNum - 1) * this.limit);
+    },
   },
   computed: {
     rows() {
       return this.series.length;
-    },
-    filteredSeries() {
-      return this.series.filter(serie => {
-        return serie.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
-      })
     }
   },
 };

@@ -2,6 +2,7 @@
   <div class="container">
     <input
       type="text"
+      @input="fetchAllCharactersWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
       placeholder="Search a character..."
@@ -19,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="character in filteredCharacters" :key="character.id">
+        <tr v-for="character in characters" :key="character.id">
           <td><img :src="`${character.thumbnail.path}.${character.thumbnail.extension}`" /></td>
           <td>{{ character.name }}</td>
           <td>
@@ -34,12 +35,25 @@
       </tbody>
     </table>
     <paginate
-      v-if="!isLoading"
+      v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
       :page-count="this.nbPages"
       :page-range="5"
       :margin-pages="5"
       :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
       :prev-text="'Prev'"
       :next-text="'Next'"
       :container-class="'pagination'"
@@ -79,9 +93,26 @@ export default {
   },
   methods: {
     async fetchAllCharacters(offset) {
+      this.isLoading = true;
       try {
         await this.characterService
           .fetchAllForPaginate(offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.characters = data.results;
+            this.totalCharacters = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async fetchAllCharactersWithSearch(name, offset) {
+      this.isLoading = true;
+      try {
+        await this.characterService
+          .fetchAllForPaginateWithSearch(name, offset === 1 ? 0 : offset)
           .then((data) => {
             this.characters = data.results;
             this.totalCharacters = data.total;
@@ -100,15 +131,14 @@ export default {
       this.isLoading = true;
       this.fetchAllCharacters((pageNum - 1) * this.limit);
     },
+    clickCallbackWithSearch(pageNum) {
+      this.isLoading = true;
+      this.fetchAllCharactersWithSearch(this.search, (pageNum - 1) * this.limit);
+    },
   },
   computed: {
     rows() {
       return this.characters.length;
-    },
-    filteredCharacters() {
-      return this.characters.filter(character => {
-        return character.name.toLowerCase().indexOf(this.search.toLowerCase()) != -1
-      })
     }
   },
 };

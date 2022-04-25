@@ -2,6 +2,7 @@
   <div class="container">
     <input
       type="text"
+      @input="fetchAllEventsWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
       placeholder="Search an event..."
@@ -19,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="event in filteredEvents" :key="event.id">
+        <tr v-for="event in events" :key="event.id">
           <td><img :src="`${event.thumbnail.path}.${event.thumbnail.extension}`" /></td>
           <td>{{ event.title }}</td>
           <td>
@@ -31,12 +32,25 @@
       </tbody>
     </table>
     <paginate
-      v-if="!isLoading"
+      v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
       :page-count="this.nbPages"
-      :page-range="3"
-      :margin-pages="2"
+      :page-range="5"
+      :margin-pages="5"
       :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
       :prev-text="'Prev'"
       :next-text="'Next'"
       :container-class="'pagination'"
@@ -90,6 +104,21 @@ export default {
         this.isLoading = false
       }
     },
+    async fetchAllEventsWithSearch(name, offset) {
+      try {
+        await this.eventService
+          .fetchAllForPaginateWithSearch(name, offset === 1 ? 0 : offset)
+          .then((data) => {
+            this.events = data.results;
+            this.totalEvents = data.total;
+            this.nbPages = Math.floor(data.total / this.limit);
+        });
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
+    },
     async goToEventDetail(id) {
       this.$router.push(`/events/${id}`);
     },
@@ -97,15 +126,14 @@ export default {
       this.isLoading = true;
       this.fetchAllEvents((pageNum - 1) * this.limit);
     },
+    clickCallbackWithSearch(pageNum) {
+      this.isLoading = true;
+      this.fetchAllEventsWithSearch(this.search, (pageNum - 1) * this.limit);
+    },
   },
   computed: {
     rows() {
       return this.events.length;
-    },
-    filteredEvents() {
-      return this.events.filter(event => {
-        return event.title.toLowerCase().indexOf(this.search.toLowerCase()) != -1
-      })
     }
   },
 };

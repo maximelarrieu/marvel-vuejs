@@ -20,6 +20,14 @@ export default class CharacterService {
         return response.data.data;
     }
 
+    async fetchAllForPaginateWithSearch(name, offset) {
+        const response = await axios.get(
+        `${process.env.VUE_APP_BASE_URL}/characters?nameStartsWith=${name}&ts=${ts}&limit=20&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
+        );
+        console.log(`${process.env.VUE_APP_BASE_URL}/characters?nameStartsWith=${name}&ts=${ts}&limit=20&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
+        return response.data.data;
+    }
+
     async fetchOne(characterId) {
         const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/characters/${characterId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`)
         return response.data.data
