@@ -15,7 +15,7 @@
         class="btn btn-primary"
         @click="goToCharactersList()"
       >
-        Characters
+        Personnages
       </button>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="Basic example">
@@ -25,17 +25,17 @@
     </div>
     <div class="btn-group mr-2" role="group" aria-label="Basic example">
       <button type="button" class="btn btn-primary" @click="goToCreatorsList()">
-        Creators
+        Créateurs
       </button>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="Basic example">
       <button type="button" class="btn btn-primary" @click="goToEventsList()">
-        Events
+        Évènements
       </button>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="Basic example">
       <button type="button" class="btn btn-primary" @click="goToStoriesList()">
-        Stories
+        Histoires
       </button>
     </div>
   </div>

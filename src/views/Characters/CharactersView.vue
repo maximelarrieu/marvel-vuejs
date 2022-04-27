@@ -11,29 +11,20 @@
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
-    <table v-else class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th scope="col">Name</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="character in characters" :key="character.id">
-          <td><img :src="`${character.thumbnail.path}.${character.thumbnail.extension}`" /></td>
-          <td>{{ character.name }}</td>
-          <td>
-            <button
-              class="btn btn-primary"
-              @click="goToCharacterDetail(character.id)"
-            >
-              Show details
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="characters-container row">
+      <div
+        v-for="character in characters"
+        :key="character.id"
+        class="col-md-3 character-preview"
+        @click="goToCharacterDetail(character.id)"
+      >
+        <img
+          :src="`${character.thumbnail.path}.${character.thumbnail.extension}`"
+        />
+        <p class="character-title">{{ character.name }}</p>
+      </div>
+    </div>
+
     <paginate
       v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
@@ -82,7 +73,7 @@ export default {
       characters: [],
       totalCharacters: 0,
       nbPages: 0,
-      search: ""
+      search: "",
     };
   },
   created() {
@@ -133,34 +124,51 @@ export default {
     },
     clickCallbackWithSearch(pageNum) {
       this.isLoading = true;
-      this.fetchAllCharactersWithSearch(this.search, (pageNum - 1) * this.limit);
+      this.fetchAllCharactersWithSearch(
+        this.search,
+        (pageNum - 1) * this.limit
+      );
     },
   },
   computed: {
     rows() {
       return this.characters.length;
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.characters-container {
+  margin-top: 3rem;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.character-preview {
+  margin-bottom: 2rem;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.character-preview img {
+  transition: transform 100ms ease-in-out 25ms;
+  box-shadow: 0 26px 24px -16px rgb(0 0 0 / 40%);
 }
-a {
-  color: #42b983;
+
+.character-preview:hover img {
+  cursor: pointer;
+  transform: translateY(-3%);
 }
+
+.character-preview:hover .character-title {
+  color: red;
+}
+
+.character-preview .character-title {
+  margin-top: 2rem;
+}
+
 img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+}
+
+.pagination {
+  justify-content: center;
 }
 </style>

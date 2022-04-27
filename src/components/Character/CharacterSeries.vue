@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <h4>Series</h4>
-    <ul class="list-group" v-if="series.length > 0">
-      <li
-        class="list-group-item"
-        v-for="serie in series"
+  <div class="mt-5">
+    <h4 class="text-left">Series</h4>
+    <div v-if="series.length > 0" class="series text-left">
+      <span
+        v-for="(serie, index) in series"
         :key="serie.id"
-        @click="goToSerieDetails(serie.id)"
+        @click="goToComicDetails(serie.id)"
       >
-        {{ serie.title }}
-      </li>
-    </ul>
-    <p v-if="series.length === 0">pas de series</p>
+        <span class="serie">{{ serie.title }}</span>
+        <span v-if="index != Object.keys(serie).length - 1">&nbsp;|&nbsp;</span>
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de series</p>
   </div>
 </template>
 
@@ -43,3 +43,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.series {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.series .serie:hover {
+  cursor: pointer;
+  color: red;
+}
+</style>

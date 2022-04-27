@@ -1,19 +1,26 @@
 <template>
-  <div class="container">
-    <h3>CHARACTER</h3>
-    <img :src="characterImage" alt="character" class="mb-4" />
-    <h2>{{ character.name }}</h2>
-    <p v-if="character.description">{{ character.description }}</p>
-    <p v-else-if="!character.description">pas de description</p>
+  <div class="container mb-5 text-left">
     <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-3">
+      <div class="col-md-2 img-container">
+        <img :src="characterImage" alt="personnage" class="mb-4" />
+      </div>
+      <div class="col-md-10">
+        <div class="mb-4">
+          <h2 class="text-left">{{ character.name }}</h2>
+          <p v-if="character.description !== ''">{{ character.description }}</p>
+          <p v-else class="text-left">Aucune description</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
         <CharacterComics />
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-6">
-        <CharacterInfos />
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-3">
+      <div class="col-12">
         <CharacterSeries />
+      </div>
+      <div class="col-12">
+        <CharacterInfos />
       </div>
     </div>
   </div>
@@ -59,7 +66,6 @@ export default {
 
 <style scoped>
 img {
-  width: 300px;
-  height: 300px;
+  width: 100%;
 }
 </style>

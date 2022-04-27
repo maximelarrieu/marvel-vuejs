@@ -1,17 +1,19 @@
 <template>
-  <div>
-    <h4>Comics</h4>
-    <ul class="list-group" v-if="comics.length > 0">
-      <li
-        class="list-group-item"
-        v-for="comic in comics"
+  <div class="mt-5">
+    <h4 class="text-left">Comics</h4>
+    <div v-if="comics.length > 0" class="comics text-left">
+      <span
+        v-for="(comic, index) in comics"
         :key="comic.id"
         @click="goToComicDetails(comic.id)"
       >
-        {{ comic.title }}
-      </li>
-    </ul>
-    <p v-if="comics.length === 0">pas de comics</p>
+        <span class="comic">{{ comic.title }}</span>
+        <span v-if="index != Object.keys(comics).length - 1"
+          >&nbsp;|&nbsp;</span
+        >
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de comics</p>
   </div>
 </template>
 
@@ -43,3 +45,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.comics {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.comics .comic:hover {
+  cursor: pointer;
+  color: red;
+}
+</style>
