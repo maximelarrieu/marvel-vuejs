@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <h4>Creators</h4>
-    <ul class="list-group" v-if="creators.length > 0">
-      <li
-        class="list-group-item"
-        v-for="creator in creators"
+  <div class="mt-5 text-left">
+    <p class="h4">Créateurs</p>
+    <div v-if="creators.length > 0" class="creators text-left">
+      <span
+        v-for="(creator, index) in creators"
         :key="creator.id"
         @click="goToComicCreator(creator.id)"
       >
-        {{ creator.fullName }}
-      </li>
-    </ul>
-    <p v-else-if="creators.length === 0">pas de créateurs</p>
+        <span class="creator">{{ creator.fullName }}</span>
+        <span v-if="index != Object.keys(creators).length - 1">,&nbsp;</span>
+      </span>
+    </div>
+    <p v-else-if="creators.length === 0">Pas de créateurs</p>
   </div>
 </template>
 
@@ -43,3 +43,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.creators {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.creators .creator:hover {
+  cursor: pointer;
+  color: red;
+}
+</style>

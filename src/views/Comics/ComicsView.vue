@@ -11,52 +11,32 @@
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
-    <table v-else class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th scope="col">Title</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="comic in comics" :key="comic.id">
-          <td><img :src="`${comic.thumbnail.path}.${comic.thumbnail.extension}`" /></td>
-          <td>{{ comic.title }}</td>
-          <td>
-            <button class="btn btn-primary" @click="goToComicDetail(comic.id)">
-              Show details
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <paginate
-      v-if="!isLoading && this.search.length === 0"
-      v-model="currentPage"
-      :page-count="this.nbPages"
-      :page-range="5"
-      :margin-pages="5"
-      :click-handler="clickCallback"
-      :prev-text="'Prev'"
-      :next-text="'Next'"
-      :container-class="'pagination'"
-      :page-class="'page-item'"
-    >
-    </paginate>
-    <paginate
-      v-if="!isLoading && this.search.length > 0"
-      v-model="currentPage"
-      :page-count="this.nbPages"
-      :page-range="5"
-      :margin-pages="5"
-      :click-handler="clickCallbackWithSearch"
-      :prev-text="'Prev'"
-      :next-text="'Next'"
-      :container-class="'pagination'"
-      :page-class="'page-item'"
-    >
-    </paginate>
+    <div v-else class="comics-container row">
+      <div
+        v-for="comic in comics"
+        :key="comic.id"
+        class="col-md-3 comic-preview"
+        @click="goToComicDetail(comic.id)"
+      >
+        <img :src="`${comic.thumbnail.path}.${comic.thumbnail.extension}`" />
+        <p class="comic-title">{{ comic.title }}</p>
+      </div>
+    </div>
+    <div class="pagination">
+      <paginate
+        v-if="!isLoading && this.search.length === 0"
+        v-model="currentPage"
+        :page-count="this.nbPages"
+        :page-range="5"
+        :margin-pages="5"
+        :click-handler="clickCallback"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'"
+        :page-class="'page-item'"
+      >
+      </paginate>
+    </div>
   </div>
 </template>
 
@@ -80,7 +60,7 @@ export default {
       comicImage: "",
       totalComics: 0,
       nbPages: 0,
-      search: ""
+      search: "",
     };
   },
   created() {
@@ -99,7 +79,7 @@ export default {
             this.comics = data.results;
             this.totalComics = data.total;
             this.nbPages = Math.floor(data.total / this.limit);
-          })
+          });
       } catch (error) {
         console.log(error);
       } finally {
@@ -115,7 +95,7 @@ export default {
             this.comics = data.results;
             this.totalComics = data.total;
             this.nbPages = Math.floor(data.total / this.limit);
-          })
+          });
       } catch (error) {
         console.log(error);
       } finally {
@@ -130,33 +110,47 @@ export default {
     },
     clickCallbackWithSearch(pageNum) {
       this.fetchAllComicsWithSearch(this.search, (pageNum - 1) * this.limit);
-    }
+    },
   },
   computed: {
     rows() {
       return this.comics.length;
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.comics-container {
+  margin-top: 3rem;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.comic-preview {
+  margin-bottom: 2rem;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.comic-preview img {
+  transition: transform 100ms ease-in-out 25ms;
+  box-shadow: 0 26px 24px -16px rgb(0 0 0 / 40%);
 }
-a {
-  color: #42b983;
+
+.comic-preview:hover img {
+  cursor: pointer;
+  transform: translateY(-3%);
 }
+
+.comic-preview:hover .comic-title {
+  color: red;
+}
+
+.comic-preview .comic-title {
+  margin-top: 2rem;
+}
+
 img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+}
+
+.pagination {
+  justify-content: center;
 }
 </style>

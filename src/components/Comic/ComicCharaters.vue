@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <h4>Personnages</h4>
-    <ul class="list-group" v-if="characters.length > 0">
-      <li
-        class="list-group-item"
-        v-for="character in characters"
+  <div class="mt-5">
+    <h4 class="text-left">Personnages</h4>
+    <div v-if="characters.length > 0" class="characters text-left">
+      <span
+        v-for="(character, index) in characters"
         :key="character.id"
         @click="goToCharacterDetails(character.id)"
       >
-        {{ character.name }}
-      </li>
-    </ul>
-    <p v-if="characters.length === 0">pas de personnages</p>
+        <span class="character">{{ character.name }}</span>
+        <span v-if="index != Object.keys(character).length - 1">,&nbsp;</span>
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de personnages</p>
   </div>
 </template>
 
@@ -43,3 +43,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.characters .character:hover {
+  cursor: pointer;
+  color: red;
+}
+</style>

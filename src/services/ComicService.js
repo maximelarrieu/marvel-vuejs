@@ -17,14 +17,14 @@ export default class ComicService {
 
   async fetchAllForPaginate(offset) {
     const response = await axios.get(
-      `${process.env.VUE_APP_BASE_URL}/comics?ts=${ts}&limit=20&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
+      `${process.env.VUE_APP_BASE_URL}/comics?ts=${ts}&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
     );
     return response.data.data;
   }
 
   async fetchAllForPaginateWithSearch(title, offset) {
     const response = await axios.get(
-      `${process.env.VUE_APP_BASE_URL}/comics?titleStartsWith=${title}&ts=${ts}&limit=20&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
+      `${process.env.VUE_APP_BASE_URL}/comics?titleStartsWith=${title}&ts=${ts}&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
     );
     return response.data.data;
   }

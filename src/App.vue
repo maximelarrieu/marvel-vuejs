@@ -40,11 +40,17 @@
     </div>
   </div>
   <router-view></router-view>
+  <Footer />
 </template>
 
 <script>
+import FooterComponent from "@/components/Footer/Footer.vue";
+
 export default {
   name: "App",
+  components: {
+    Footer: FooterComponent,
+  },
   methods: {
     async goToComicsList() {
       this.$router.push(`/comics`);

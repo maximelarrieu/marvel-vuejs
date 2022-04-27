@@ -1,19 +1,26 @@
 <template>
   <div class="container mb-5">
-    <button class="btn btn-primary" @click="goToPage('/comics')">Go back</button>
-    <h3>COMICS</h3>
-    <img :src="comicImage" alt="comic" class="mb-4" />
-    <h2>{{ comic.title }}</h2>
-    <p>{{ comic.description }}</p>
     <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-3">
-        <ComicCharaters />
+      <div class="col-md-5 img-container">
+        <img :src="comicImage" alt="comic" class="mb-4" />
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-6">
-        <ComicInfos />
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-3">
-        <ComicCreators />
+      <div class="col-md-7">
+        <div class="mb-4">
+          <h2 class="text-left">{{ comic.title }}</h2>
+          <p v-if="comic.description !== ''">{{ comic.description }}</p>
+          <p v-else class="text-left">Aucune description</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <ComicCreators />
+          </div>
+          <div class="col-md-6">
+            <ComicCharaters />
+          </div>
+          <div class="col-12">
+            <ComicInfos />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -62,7 +69,6 @@ export default {
 
 <style scoped>
 img {
-  width: 300px;
-  height: 300px;
+  width: 100%;
 }
 </style>
