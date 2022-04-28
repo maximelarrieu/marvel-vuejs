@@ -3,12 +3,13 @@
     <p class="h4">Créateurs</p>
     <div v-if="creators.length > 0" class="creators text-left">
       <span
-        v-for="(creator, index) in creators"
+        v-for="creator in creators"
         :key="creator.id"
         @click="goToComicCreator(creator.id)"
       >
-        <span class="creator">{{ creator.fullName }}</span>
-        <span v-if="index != Object.keys(creators).length - 1">,&nbsp;</span>
+        <span class="creator badge badge-pill badge-primary">{{
+          creator.fullName
+        }}</span>
       </span>
     </div>
     <p v-else-if="creators.length === 0">Pas de créateurs</p>
@@ -43,15 +44,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.creators {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.creators .creator:hover {
-  cursor: pointer;
-  color: red;
-}
-</style>

@@ -7,7 +7,7 @@
       class="form-control mb-5"
       placeholder="Search a character..."
     />
-    <h2>Characters list</h2>
+    <h2>Les Personnages</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>

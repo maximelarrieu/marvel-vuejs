@@ -1,17 +1,18 @@
 <template>
   <div>
-    <h4>Creators</h4>
-    <ul class="list-group" v-if="creators.length > 0">
-      <li
-        class="list-group-item"
+    <h4 class="text-left">Créateurs</h4>
+    <div v-if="creators.length > 0" class="creators text-left">
+      <span
         v-for="creator in creators"
         :key="creator.id"
         @click="goToCreatorDetails(creator.id)"
       >
-        {{ creator.fullName }}
-      </li>
-    </ul>
-    <p v-if="creators.length === 0">pas de creators</p>
+        <span class="badge badge-pill badge-primary creator">{{
+          creator.fullName
+        }}</span>
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de personnages</p>
   </div>
 </template>
 

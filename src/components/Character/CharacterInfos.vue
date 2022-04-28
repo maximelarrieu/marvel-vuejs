@@ -6,11 +6,14 @@
         <h5>Events</h5>
         <div class="events">
           <div v-if="events.length > 0">
-            <span v-for="(event, index) in events" :key="event.id">
-              <span class="event">{{ event.name }}</span>
-              <span v-if="index != Object.keys(events).length - 1"
-                >,&nbsp;</span
-              >
+            <span
+              v-for="event in events"
+              :key="event.id"
+              @click="goToComicDetails(event.id)"
+            >
+              <span class="event badge badge-pill badge-warning">{{
+                event.title
+              }}</span>
             </span>
           </div>
           <p v-else-if="events.length === 0">Pas d'events</p>
@@ -20,11 +23,10 @@
         <h5 text-left>Stories</h5>
         <div class="stories">
           <div v-if="stories.length > 0">
-            <span v-for="(story, index) in stories" :key="story.id">
-              <span class="story">{{ story.title }}</span>
-              <span v-if="index != Object.keys(stories).length - 1"
-                >,&nbsp;</span
-              >
+            <span v-for="story in stories" :key="story.id">
+              <span class="story badge badge-pill badge-danger">{{
+                story.title
+              }}</span>
             </span>
           </div>
           <p v-else-if="stories.length === 0">Pas de story</p>
@@ -32,28 +34,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div>
-        <h4>Infos</h4>
-        <h5>Events</h5>
-        <ul class="list-group" v-if="events.length > 0">
-            <li class="list-group-item" v-for="event in events" :key="event.id" @click="goToComicDetails(event.id)">
-                {{ event.title }}
-            </li>
-        </ul>
-        <p v-if="events.length === 0">
-            pas de events
-        </p>
-        <h5>Stories</h5>
-        <ul class="list-group" v-if="stories.length > 0">
-            <li class="list-group-item" v-for="story in stories" :key="story.id">
-                {{ story.title }}
-            </li>
-        </ul>
-        <p v-else-if="stories.length === 0">
-            pas de story
-        </p>
-    </div> -->
 </template>
 
 <script>
@@ -88,15 +68,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.stories {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.stories .story:hover {
-  cursor: pointer;
-  color: red;
-}
-</style>

@@ -1,17 +1,18 @@
 <template>
-  <div>
-    <h4>Comics</h4>
-    <ul class="list-group" v-if="comics.length > 0">
-      <li
-        class="list-group-item"
+  <div class="mt-5">
+    <h4 class="text-left">Comics</h4>
+    <div v-if="comics.length > 0" class="comics text-left">
+      <span
         v-for="comic in comics"
         :key="comic.id"
-        @click="goToCreatorComic(comic.id)"
+        @click="goToComicDetails(comic.id)"
       >
-        {{ comic.title }}
-      </li>
-    </ul>
-    <p v-else-if="comics.length === 0">pas de comics</p>
+        <span class="comic badge badge-pill badge-primary">{{
+          comic.title
+        }}</span>
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de comics</p>
   </div>
 </template>
 

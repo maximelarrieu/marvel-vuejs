@@ -1,18 +1,25 @@
 <template>
   <div class="container mb-5">
-    <h3>CREATOR</h3>
-    <img :src="creatorImage" alt="creator" />
-    <h2>{{ creator.fullName }}</h2>
     <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-3">
-        <CreatorComics />
+      <div class="col-md-5 img-container">
+        <img :src="creatorImage" alt="creator" class="mb-4" />
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-6">
-        <CreatorInfos />
+      <div class="col-md-7">
+        <div class="mb-4">
+          <h2 class="text-left">{{ creator.fullName }}</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <CreatorComics />
+          </div>
+          <div class="col-md-12">
+            <CreatorSeries />
+          </div>
+        </div>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-3">
-        <CreatorSeries />
-      </div>
+    </div>
+    <div>
+      <CreatorInfos />
     </div>
   </div>
 </template>
@@ -29,7 +36,7 @@ export default {
   components: {
     CreatorComics,
     CreatorSeries,
-    CreatorInfos
+    CreatorInfos,
   },
   data() {
     return {
@@ -55,10 +62,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-img {
-  width: 300px;
-  height: 300px;
-}
-</style>

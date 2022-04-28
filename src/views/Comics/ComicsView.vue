@@ -7,7 +7,7 @@
       class="form-control mb-5"
       placeholder="Search a comics..."
     />
-    <h2>Comics list</h2>
+    <h2>Les Comics</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
@@ -119,38 +119,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.comics-container {
-  margin-top: 3rem;
-}
-.comic-preview {
-  margin-bottom: 2rem;
-}
-
-.comic-preview img {
-  transition: transform 100ms ease-in-out 25ms;
-  box-shadow: 0 26px 24px -16px rgb(0 0 0 / 40%);
-}
-
-.comic-preview:hover img {
-  cursor: pointer;
-  transform: translateY(-3%);
-}
-
-.comic-preview:hover .comic-title {
-  color: red;
-}
-
-.comic-preview .comic-title {
-  margin-top: 2rem;
-}
-
-img {
-  width: 100%;
-}
-
-.pagination {
-  justify-content: center;
-}
-</style>

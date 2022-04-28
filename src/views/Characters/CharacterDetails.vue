@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-6">
         <CharacterComics />
       </div>
-      <div class="col-12">
+      <div class="col-6">
         <CharacterSeries />
       </div>
       <div class="col-12">

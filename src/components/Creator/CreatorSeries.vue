@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <h4>Series</h4>
-    <ul class="list-group" v-if="series.length > 0">
-      <li
-        class="list-group-item"
+  <div class="mt-5">
+    <h4 class="text-left">Series</h4>
+    <div v-if="series.length > 0" class="series text-left">
+      <span
         v-for="serie in series"
         :key="serie.id"
         @click="goToCreatorSerie(serie.id)"
       >
-        {{ serie.title }}
-      </li>
-    </ul>
-    <p v-else-if="series.length === 0">pas de series</p>
+        <span class="serie badge badge-pill badge-info">{{ serie.title }}</span>
+      </span>
+    </div>
+    <p v-else class="text-left">Pas de series</p>
   </div>
 </template>
 

@@ -7,33 +7,24 @@
       class="form-control mb-5"
       placeholder="Search a creator..."
     />
-    <h2>Creator list</h2>
+    <h2>Les Createurs</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
-    <table v-else class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th scope="col">Creator</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="creator in creators" :key="creator.id">
-          <td><img :src="`${creator.thumbnail.path}.${creator.thumbnail.extension}`" /></td>
-          <td>{{ creator.fullName }}</td>
-          <td>
-            <button
-              class="btn btn-primary"
-              @click="goToCreatorDetail(creator.id)"
-            >
-              Show details
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="creators-container row">
+      <div
+        v-for="creator in creators"
+        :key="creator.id"
+        class="col-md-3 creator-preview"
+        @click="goToCreatorDetail(creator.id)"
+      >
+        <img
+          :src="`${creator.thumbnail.path}.${creator.thumbnail.extension}`"
+        />
+        <p class="creator-name">{{ creator.fullName }}</p>
+      </div>
+    </div>
+
     <paginate
       v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
@@ -47,7 +38,7 @@
       :page-class="'page-item'"
     >
     </paginate>
-    <paginate
+    <!-- <paginate
       v-if="!isLoading && this.search.length > 0"
       v-model="currentPage"
       :page-count="this.nbPages"
@@ -59,7 +50,7 @@
       :container-class="'pagination'"
       :page-class="'page-item'"
     >
-    </paginate>
+    </paginate> -->
   </div>
 </template>
 
@@ -82,7 +73,7 @@ export default {
       creators: [],
       totalCreators: 0,
       nbPages: 0,
-      search: ""
+      search: "",
     };
   },
   created() {
@@ -137,28 +128,7 @@ export default {
   computed: {
     rows() {
       return this.creators.length;
-    }
+    },
   },
 };
 </script>
-
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-img {
-  width: 100px;
-  height: 100px;
-}
-</style>

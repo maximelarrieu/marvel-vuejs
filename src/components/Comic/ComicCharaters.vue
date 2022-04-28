@@ -3,12 +3,13 @@
     <h4 class="text-left">Personnages</h4>
     <div v-if="characters.length > 0" class="characters text-left">
       <span
-        v-for="(character, index) in characters"
+        v-for="character in characters"
         :key="character.id"
         @click="goToCharacterDetails(character.id)"
       >
-        <span class="character">{{ character.name }}</span>
-        <span v-if="index != Object.keys(character).length - 1">,&nbsp;</span>
+        <span class="badge badge-pill badge-info character">{{
+          character.name
+        }}</span>
       </span>
     </div>
     <p v-else class="text-left">Pas de personnages</p>
@@ -43,15 +44,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.characters {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.characters .character:hover {
-  cursor: pointer;
-  color: red;
-}
-</style>

@@ -7,32 +7,22 @@
       class="form-control mb-5"
       placeholder="Search a serie..."
     />
-    <h2>Series list</h2>
+    <h2>Les Series</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
-    <table v-else class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th scope="col">Title</th>
-          <th scope="col">Description</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="serie in series" :key="serie.id">
-          <td><img :src="`${serie.thumbnail.path}.${serie.thumbnail.extension}`" /></td>
-          <td>{{ serie.title }}</td>
-          <td>{{ serie.description ?? "No description" }}</td>
-          <td>
-            <button class="btn btn-primary" @click="goToSerieDetail(serie.id)">
-              Show details
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="series-container row">
+      <div
+        v-for="serie in series"
+        :key="serie.id"
+        class="col-md-3 serie-preview"
+        @click="goToSerieDetail(serie.id)"
+      >
+        <img :src="`${serie.thumbnail.path}.${serie.thumbnail.extension}`" />
+        <p class="serie-title">{{ serie.title }}</p>
+      </div>
+    </div>
+
     <paginate
       v-if="!isLoading && this.search.length === 0"
       v-model="currentPage"
@@ -81,7 +71,7 @@ export default {
       series: [],
       totalSeries: 0,
       nbPages: 0,
-      search: ""
+      search: "",
     };
   },
   created() {
@@ -136,28 +126,42 @@ export default {
   computed: {
     rows() {
       return this.series.length;
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.series-container {
+  margin-top: 3rem;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.serie-preview {
+  margin-bottom: 2rem;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.serie-preview img {
+  transition: transform 100ms ease-in-out 25ms;
+  box-shadow: 0 26px 24px -16px rgb(0 0 0 / 40%);
 }
-a {
-  color: #42b983;
+
+.serie-preview:hover img {
+  cursor: pointer;
+  transform: translateY(-3%);
 }
+
+.serie-preview:hover .serie-title {
+  color: red;
+}
+
+.serie-preview .serie-title {
+  margin-top: 2rem;
+}
+
 img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+}
+
+.pagination {
+  justify-content: center;
 }
 </style>

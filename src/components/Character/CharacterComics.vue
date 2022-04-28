@@ -3,14 +3,13 @@
     <h4 class="text-left">Comics</h4>
     <div v-if="comics.length > 0" class="comics text-left">
       <span
-        v-for="(comic, index) in comics"
+        v-for="comic in comics"
         :key="comic.id"
         @click="goToComicDetails(comic.id)"
       >
-        <span class="comic">{{ comic.title }}</span>
-        <span v-if="index != Object.keys(comics).length - 1"
-          >&nbsp;|&nbsp;</span
-        >
+        <span class="comic badge badge-pill badge-primary">{{
+          comic.title
+        }}</span>
       </span>
     </div>
     <p v-else class="text-left">Pas de comics</p>
@@ -45,15 +44,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.comics {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.comics .comic:hover {
-  cursor: pointer;
-  color: red;
-}
-</style>
