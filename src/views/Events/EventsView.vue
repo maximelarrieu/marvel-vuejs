@@ -5,9 +5,9 @@
       @input="fetchAllEventsWithSearch(search, 0)"
       v-model="search"
       class="form-control mb-5"
-      placeholder="Search an event..."
+      placeholder="Rechercher un évènement..."
     />
-    <h2>Events list</h2>
+    <h2>Liste des évènements</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
@@ -25,7 +25,7 @@
           <td>{{ event.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToEventDetail(event.id)">
-              Show details
+              Voir les détails
             </button>
           </td>
         </tr>

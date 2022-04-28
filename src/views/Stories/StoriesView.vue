@@ -4,9 +4,9 @@
       type="text"
       v-model="search"
       class="form-control mb-5"
-      placeholder="Search a story..."
+      placeholder="Rechercher une story..."
     />
-    <h2>Stories list</h2>
+    <h2>Liste des stories</h2>
     <div class="m-5" v-if="isLoading">
       <loader />
     </div>
@@ -24,7 +24,7 @@
           <td>{{ story.title }}</td>
           <td>
             <button class="btn btn-primary" @click="goToStoryDetail(story.id)">
-              Show details
+              Voir les détails
             </button>
           </td>
         </tr>

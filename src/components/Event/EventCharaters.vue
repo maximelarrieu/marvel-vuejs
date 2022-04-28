@@ -1,14 +1,18 @@
 <template>
     <div>
-        <h4>Characters</h4>
-        <ul class="list-group" v-if="characters.length > 0">
-            <li class="list-group-item" v-for="character in characters" :key="character.id" @click="goToCharacterDetails(character.id)">
-                {{ character.name }}
-            </li>
-        </ul>
-        <p v-if="characters.length === 0">
-            pas de personnages
-        </p>
+        <h4 class="text-left">Personnages</h4>
+        <div v-if="characters.length > 0" class="characters text-left">
+        <span
+            v-for="character in characters"
+            :key="character.id"
+            @click="goToCharacterDetails(character.id)"
+        >
+            <span class="badge badge-pill badge-info character">{{
+            character.name
+            }}</span>
+        </span>
+        </div>
+        <p v-else class="text-left">Pas de personnages</p>
     </div>
 </template>
 

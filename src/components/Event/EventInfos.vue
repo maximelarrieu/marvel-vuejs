@@ -1,33 +1,45 @@
 <template>
     <div>
         <h4>Infos</h4>
-        <h5>Comics</h5>
-        <ul class="list-group" v-if="comics.length > 0">
-            <li class="list-group-item" v-for="comic in comics" :key="comic.id" @click="goToComicDetails(comic.id)">
-                {{ comic.title }}
-            </li>
-        </ul>
-        <p v-if="comics.length === 0">
-            no comics
-        </p>
-        <h5>Series</h5>
-        <ul class="list-group" v-if="series.length > 0">
-            <li class="list-group-item" v-for="serie in series" :key="serie.id" @click="goToSerieDetails(serie.id)">
-                {{ serie.title }}
-            </li>
-        </ul>
-        <p v-if="series.length === 0">
-            no series
-        </p>
-        <h5>Stories</h5>
-        <ul class="list-group" v-if="stories.length > 0">
-            <li class="list-group-item" v-for="story in stories" :key="story.id" @click="goToStoryDetails(story.id)">
-                {{ story.title }}
-            </li>
-        </ul>
-        <p v-else-if="stories.length === 0">
-            no stories
-        </p>
+        <h5 class="text-left">Comics</h5>
+        <div v-if="comics.length > 0" class="comics text-left">
+            <span
+                v-for="comic in comics"
+                :key="comic.id"
+                @click="goToComicDetails(comic.id)"
+            >
+                <span class="comic badge badge-pill badge-primary">{{
+                    comic.title
+                }}</span>
+            </span>
+        </div>
+        <p v-else class="text-left">Pas de comics</p>
+        <h5 class="text-left">Series</h5>
+        <div v-if="series.length > 0" class="series text-left">
+            <span
+                v-for="serie in series"
+                :key="serie.id"
+                @click="goToSerieDetails(serie.id)"
+            >
+                <span class="serie badge badge-pill badge-warning">{{
+                    serie.title
+                }}</span>
+            </span>
+        </div>
+        <p v-else class="text-left">Pas de series</p>
+        <h5 class="text-left">Stories</h5>
+        <div v-if="stories.length > 0" class="stories text-left">
+            <span
+                v-for="story in stories"
+                :key="story.id"
+                @click="goToSerieDetails(story.id)"
+            >
+                <span class="story badge badge-pill badge-danger">{{
+                    story.title
+                }}</span>
+            </span>
+        </div>
+        <p v-else class="text-left">Pas de stories</p>
     </div>
 </template>
 
@@ -62,13 +74,13 @@ export default {
             await this.eventService.fetchEventStories(id).then(data => this.stories = data.results)
         },
         async goToComicDetails(id) {
-            this.$router.push(`/comic/${id}`)
+            this.$router.push(`/comics/${id}`)
         },
         async goToSerieDetails(id) {
-            this.$router.push(`/serie/${id}`)
+            this.$router.push(`/series/${id}`)
         },
         async goToStoryDetails(id) {
-            this.$router.push(`/story/${id}`)
+            this.$router.push(`/stories/${id}`)
         }
     }
 }

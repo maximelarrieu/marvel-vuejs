@@ -1,5 +1,13 @@
 <template>
-  <div class="container"></div>
+  <div class="container">
+    <h2>Présentation du projet</h2>
+    <h4>Application web développée en VueJS 3</h4>
+    <p>Utilisation de la Marvel API</p>
+    <p>
+      Cet application vous premettra de rechercher vos comics préférés.
+      Aussi, les personnages présent et les séries, créateurs, évènements et histoires correspondants.
+    </p>
+  </div>
 </template>
 
 <script>
