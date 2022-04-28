@@ -38,7 +38,7 @@
       :page-class="'page-item'"
     >
     </paginate>
-    <!-- <paginate
+    <paginate
       v-if="!isLoading && this.search.length > 0"
       v-model="currentPage"
       :page-count="this.nbPages"
@@ -50,7 +50,7 @@
       :container-class="'pagination'"
       :page-class="'page-item'"
     >
-    </paginate> -->
+    </paginate>
   </div>
 </template>
 

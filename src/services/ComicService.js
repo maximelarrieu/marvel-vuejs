@@ -29,6 +29,13 @@ export default class ComicService {
     return response.data.data;
   }
 
+  async fetchAllForPaginateByDate(dateStart, dateEnd, offset) {
+    const response = await axios.get(
+      `${process.env.VUE_APP_BASE_URL}/comics?dateRange=${dateStart}%2C${dateEnd}&ts=${ts}&offset=${offset}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`
+    );
+    return response.data.data;
+  }
+
   async fetchOne(comicId) {
     const response = await axios.get(
       `${process.env.VUE_APP_BASE_URL}/comics/${comicId}?ts=${ts}&apikey=${process.env.VUE_APP_API_KEY_PUBLIC}&hash=${hash}`

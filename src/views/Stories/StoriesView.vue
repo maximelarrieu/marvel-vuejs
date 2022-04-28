@@ -41,6 +41,19 @@
       :page-class="'page-item'"
     >
     </paginate>
+    <paginate
+      v-if="!isLoading && this.search.length > 0"
+      v-model="currentPage"
+      :page-count="this.nbPages"
+      :page-range="5"
+      :margin-pages="5"
+      :click-handler="clickCallbackWithSearch"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
   </div>
 </template>
 
@@ -94,6 +107,10 @@ export default {
     clickCallback(pageNum) {
       this.isLoading = true;
       this.fetchAllStories((pageNum - 1) * this.limit);
+    },
+    clickCallbackWithSearch(pageNum) {
+      this.isLoading = true;
+      this.fetchAllStoriesWithSearch(this.search, (pageNum - 1) * this.limit);
     },
   },
   computed: {
